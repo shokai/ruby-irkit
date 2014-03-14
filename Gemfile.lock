@@ -3,17 +3,20 @@ PATH
   specs:
     irkit (0.0.1)
       dnssd
+      hashie
       httparty
+      json
 
 GEM
   remote: https://rubygems.org/
   specs:
     dnssd (2.0)
+    hashie (2.0.5)
     httparty (0.13.0)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
     json (1.8.1)
-    minitest (5.3.0)
+    minitest (5.3.1)
     multi_xml (0.5.5)
     rake (10.1.1)
 

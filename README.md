@@ -1,24 +1,39 @@
-# Irkit
+# IRKit
 
-TODO: Write a gem description
+[IRKit](http://getirkit.com) Client for Ruby
+
 
 ## Installation
 
-Add this line to your application's Gemfile:
+    % gem install irkit
 
-    gem 'irkit'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install irkit
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+require 'irkit'
+
+device = IRKit::Device.find.first   # find device with Bonjour
+# device = IRKit::Device.new '192.168.1.112'
+unless device
+  STDERR.puts 'device not found'
+  exit 1
+end
+
+p device
+
+ir_data = device.get_messages
+unless ir_data
+  STDERR.puts 'IR data not found'
+  exit 1
+end
+
+p ir_data
+
+puts 'rewrite IR data'
+p device.post_messages ir_data
+```
+
 
 ## Contributing
 
