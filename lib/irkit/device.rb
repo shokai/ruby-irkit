@@ -1,15 +1,18 @@
 module IRKit
   class Device
 
-    attr_reader :addr, :bonjour_name
+    attr_accessor :address, :bonjour_name
 
-    def initialize(addr, bonjour_name=nil)
-      @addr = addr
-      @bonjour_name = bonjour_name
+    def initialize(address: nil)
+      @address = address
+    end
+
+    def url
+      "http://#{@address}"
     end
 
     def get_messages
-      res = HTTParty.get("http://#{@addr}/messages")
+      res = HTTParty.get("#{url}/messages")
       case res.code
       when 200
         return nil if res.body.length < 1
@@ -23,11 +26,11 @@ module IRKit
       opts = {
         :body => data.to_json
       }
-      HTTParty.post "http://#{@addr}/messages", opts
+      HTTParty.post "#{url}/messages", opts
     end
 
     def get_token
-      res = HTTParty.post "http://#{@addr}/keys", {}
+      res = HTTParty.post "#{url}/keys", {}
       case res.code
       when 200
         return JSON.parse(res.body)["clienttoken"]

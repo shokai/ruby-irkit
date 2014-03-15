@@ -2,8 +2,10 @@ $:.unshift File.expand_path '../lib', File.dirname(__FILE__)
 
 require 'irkit'
 
-device = IRKit::Device.find.first
-# device = IRKit::Device.new(address: '192.168.1.112')
+CLIENT_KEY = ENV["CLIENT_KEY"] || "your_client_key"
+DEVICE_ID  = ENV["DEVICE_ID"]  || "your_device_id"
+
+device = IRKit::InternetAPI.new(clientkey: CLIENT_KEY, deviceid: DEVICE_ID)
 unless device
   STDERR.puts 'device not found'
   exit 1
@@ -16,7 +18,7 @@ unless ir_data = device.get_messages
   exit 1
 end
 
-p ir_data
+p ir_data.message
 
 puts 'rewrite IR data'
-p device.post_messages ir_data
+p device.post_messages ir_data.message

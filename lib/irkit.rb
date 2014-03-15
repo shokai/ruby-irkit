@@ -10,6 +10,7 @@ require "irkit/error"
 require "irkit/response"
 require "irkit/device"
 require "irkit/find"
+require "irkit/internet_api"
 
 module IRKit
 end
