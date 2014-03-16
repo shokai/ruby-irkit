@@ -5,15 +5,15 @@ require 'irkit'
 CLIENT_KEY = ENV["CLIENT_KEY"] || "your_client_key"
 DEVICE_ID  = ENV["DEVICE_ID"]  || "your_device_id"
 
-device = IRKit::InternetAPI.new(clientkey: CLIENT_KEY, deviceid: DEVICE_ID)
-unless device
+irkit = IRKit::InternetAPI.new(clientkey: CLIENT_KEY, deviceid: DEVICE_ID)
+unless irkit
   STDERR.puts 'device not found'
   exit 1
 end
 
-p device
+p irkit
 
-unless ir_data = device.get_messages
+unless ir_data = irkit.get_messages
   STDERR.puts 'IR data not found'
   exit 1
 end
@@ -21,4 +21,4 @@ end
 p ir_data.message
 
 puts 'rewrite IR data'
-p device.post_messages ir_data.message
+p irkit.post_messages ir_data.message
