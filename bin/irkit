@@ -121,7 +121,10 @@ end
 if args.has_param? :post
   name = args[:post]
   puts %Q{post "#{name}"}
-  ir_data = IRKit::App::Data.IR[name]
+  unless ir_data = IRKit::App::Data.IR[name]
+    STDERR.puts %Q{IR Data "#{name}" not found}
+    exit 1
+  end
   res = irkit.post_messages ir_data
   case res.code
   when 200
