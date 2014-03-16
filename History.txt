@@ -1,3 +1,7 @@
+=== 0.0.2 2014-03-17
+
+* add executable "irkit" command
+
 === 0.0.1 2014-03-16
 
 * first release

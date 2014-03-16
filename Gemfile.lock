@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    irkit (0.0.1)
+    irkit (0.0.2)
       dnssd
       hashie
       httparty
