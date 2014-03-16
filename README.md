@@ -62,7 +62,7 @@ To access IRKit from outside of the LAN, use Internet-API.
 It uses api.getirkit.com as a proxy.
 
 
-get `clientkey` and `deviceid`
+Get `clientkey` and `deviceid`
 
 ```ruby
 irkit = IRKit::Device.find.first
