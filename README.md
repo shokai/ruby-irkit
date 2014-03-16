@@ -27,10 +27,15 @@ see [samples](https://github.com/shokai/ruby-irkit/tree/master/samples)
 
 ### Read/Write IR-Data
 
+IRKit has a HTTP-API that can be used from within the same LAN.
+
 ```ruby
 require 'irkit'
 
-irkit = IRKit::Device.find.first   # find with Bonjour
+# find IRKit with Bonjour
+irkit = IRKit::Device.find.first
+
+# or, specify with IP-Address
 # irkit = IRKit::Device.new(address: '192.168.0.123')
 
 unless irkit
@@ -51,7 +56,11 @@ irkit.post_messages ir_data
 ```
 
 
-### Internet API
+### Internet-API
+
+To access IRKit from outside of the LAN, use Internet-API.
+It uses api.getirkit.com as a proxy.
+
 
 get `clientkey` and `deviceid`
 
@@ -71,7 +80,8 @@ puts "clientkey:#{res.clientkey}"
 puts "deviceid:#{res.deviceid}"
 ```
 
-Read/Write with Internet API
+
+Read/Write with Internet-API
 
 ```ruby
 irkit = IRKit::InternetAPI.new(clientkey: "your-clientkey", deviceid: "your-deviceid")
