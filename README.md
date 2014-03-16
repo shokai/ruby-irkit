@@ -32,11 +32,11 @@ IRKit has a HTTP-API that can be used from within the same LAN.
 ```ruby
 require 'irkit'
 
-# find IRKit with Bonjour
+## find IRKit with Bonjour
 irkit = IRKit::Device.find.first
 
-# or, specify with IP-Address
-# irkit = IRKit::Device.new(address: '192.168.0.123')
+## or, specify with IP-Address
+irkit = IRKit::Device.new(address: '192.168.0.123')
 
 unless irkit
   STDERR.puts 'device not found'
