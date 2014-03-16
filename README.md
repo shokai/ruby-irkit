@@ -6,9 +6,18 @@
 ## Requirements
 
 - Ruby2.0+
+- Mac OSX or Linux
+
 
 ## Installation
 
+for Mac
+
+    % gem install irkit
+
+for Debian/Ubuntu Linux
+
+    % sudo apt-get install libavahi-compat-libdnssd-dev
     % gem install irkit
 
 
