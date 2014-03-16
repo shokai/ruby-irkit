@@ -46,6 +46,7 @@ if args.has_option? :help or
 end
 
 if args.has_option? :list
+  puts "~> #{IRKit::App::DATA_FILE}"
   puts "== Data"
   IRKit::App::Data.IR.each do |k,v|
     puts k
@@ -55,7 +56,7 @@ if args.has_option? :list
     puts "#{k}\tInternet API"
   end
   IRKit::Device.find.each do |device|
-    puts "#{device.address}\t#{device.bonjour_name}"
+    puts "#{device.address}\t#{device.bonjour_name} (bonjour)"
   end
   exit
 end
@@ -83,7 +84,10 @@ end
 if args.has_param? :address
   irkit = IRKit::Device.new(address: args[:address])
 elsif args.has_param? :device
-  info = IRKit::App::Data.Device[ args[:device] ]
+  unless info = IRKit::App::Data.Device[ args[:device] ]
+    STDERR.puts %Q{Device "#{args[:device]}" not found}
+    exit 1
+  end
   irkit = IRKit::InternetAPI.new(clientkey: info.clientkey, deviceid: info.deviceid)
 else
   irkit = IRKit::Device.find.first
