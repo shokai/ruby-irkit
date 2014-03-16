@@ -20,6 +20,21 @@ for Debian/Ubuntu Linux
     % sudo apt-get install libavahi-compat-libdnssd-dev
     % gem install irkit
 
+## irkit command
+
+    % irkit --help
+    % irkit --get  tv_on
+    % irkit --post tv_on
+    % irkit --post tv_on --address 192.168.0.123
+    % irkit --list
+    % irkit --delete tv_on
+
+use Internet API
+
+    % irkit --device:add myhouse
+    % irkit --post tv_on --device myhouse
+    % irkit --device:delete myhouse
+
 
 ## Usage
 

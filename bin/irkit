@@ -1,0 +1,150 @@
+#!/usr/bin/env ruby
+$:.unshift File.expand_path '../lib', File.dirname(__FILE__)
+
+require 'rubygems'
+require 'irkit'
+require 'args_parser'
+
+args = ArgsParser.parse ARGV do
+  arg :get, "get IR Data", :alias => :read
+  arg :post, "post IR Data", :alias => :write
+  arg :delete, "delete IR Data"
+  arg :list, "show list of IR Data and Devices"
+  arg :address, "IRKit IP Address"
+  arg :device, "use Internet API"
+  arg "device:add", "save clientkey and deviceid for Internet API"
+  arg "device:delete", "delete clientkey and deviceid"
+  arg :version, "show version", :alias => :v
+  arg :help, "show help", :alias => :h
+end
+
+if args.has_option? :version
+  puts "IRKit Client for Ruby v#{IRKit::VERSION}"
+  exit
+end
+
+binname = File.basename __FILE__
+if args.has_option? :help or
+    (!args.has_param?(:get) and !args.has_param?(:post) and
+     !args.has_option?(:list) and !args.has_param?(:delete) and
+     !args.has_param?(:device) and !args.has_param?("device:add") and
+     !args.has_param?("device:delete"))
+  STDERR.puts "IRKit v#{IRKit::VERSION}"
+  STDERR.puts "      https://github.com/shokai/ruby-irkit"
+  STDERR.puts
+  STDERR.puts args.help
+  STDERR.puts
+  STDERR.puts "e.g."
+  STDERR.puts " % #{binname} --get  tv_on"
+  STDERR.puts " % #{binname} --post tv_on"
+  STDERR.puts " % #{binname} --post tv_on --address 192.168.0.123"
+  STDERR.puts " % #{binname} --delete tv_on"
+  STDERR.puts " % #{binname} --device:add myhouse"
+  STDERR.puts " % #{binname} --post tv_on --device myhouse"
+  STDERR.puts " % #{binname} --device:delete myhouse"
+  exit
+end
+
+if args.has_option? :list
+  puts "== Data"
+  IRKit::App::Data.IR.each do |k,v|
+    puts k
+  end
+  puts "== Devices"
+  IRKit::App::Data.Device.each do |k,v|
+    puts "#{k}\tInternet API"
+  end
+  IRKit::Device.find.each do |device|
+    puts "#{device.address}\t#{device.bonjour_name}"
+  end
+  exit
+end
+
+if args.has_param? :delete
+  name = args[:delete]
+  print %Q{delete IR-Data "#{name}"? [Y/n] > }
+  exit 1 if STDIN.gets.strip.downcase =~ /n/
+  IRKit::App::Data.IR.delete name
+  IRKit::App::Data.save
+  puts %Q{"#{name}" delete!}
+  exit
+end
+
+if args.has_param? "device:delete"
+  name = args["device:delete"]
+  print %Q{delete Device "#{name}"? [Y/n] > }
+  exit 1 if STDIN.gets.strip.downcase =~ /n/
+  IRKit::App::Data.Device.delete name
+  IRKit::App::Data.save
+  puts %Q{"#{name}" delete!}
+  exit
+end
+
+if args.has_param? :address
+  irkit = IRKit::Device.new(address: args[:address])
+elsif args.has_param? :device
+  info = IRKit::App::Data.Device[ args[:device] ]
+  irkit = IRKit::InternetAPI.new(clientkey: info.clientkey, deviceid: info.deviceid)
+else
+  irkit = IRKit::Device.find.first
+end
+
+unless irkit
+  STDERR.puts "IRKit not found"
+  exit 1
+end
+
+p irkit
+
+if args.has_param? :get
+  name = args[:get]
+  if IRKit::App::Data.IR.has_key? name
+    print %Q{overwrite "#{name}"? [Y/n] > }
+    exit 1 if STDIN.gets.strip.downcase =~ /n/
+  end
+  unless res = irkit.get_messages
+    STDERR.puts "IR data not found"
+    exit 1
+  end
+  if irkit.kind_of? IRKit::InternetAPI
+    ir_data = res.message
+  else
+    ir_data = res
+  end
+  puts ir_data.to_json
+  IRKit::App::Data.IR[name] = ir_data
+  IRKit::App::Data.save
+  puts %Q{"#{name}" saved!}
+  exit
+end
+
+if args.has_param? :post
+  name = args[:post]
+  puts %Q{post "#{name}"}
+  ir_data = IRKit::App::Data.IR[name]
+  res = irkit.post_messages ir_data
+  case res.code
+  when 200
+    puts "success!"
+  else
+    STDERR.puts res
+  end
+end
+
+if args.has_param? "device:add"
+  name = args["device:add"]
+  if IRKit::App::Data.Device.has_key? name
+    print %Q{overwrite "#{name}"? [Y/n] > }
+    exit 1 if STDIN.gets.strip.downcase =~ /n/
+  end
+  token = irkit.get_token
+  puts "token:\t#{token}"
+  res = irkit.get_key_and_deviceid(token)
+
+  puts "clientkey:\t#{res.clientkey}"
+  puts "deviceid:\t#{res.deviceid}"
+  IRKit::App::Data.Device[name] = res
+  IRKit::App::Data.save
+  puts %Q{"#{name}" saved!}
+  exit
+end
