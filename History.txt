@@ -1,3 +1,8 @@
+=== 0.0.5 2014-03-17
+
+* add --device:show option on irkit command
+* hide token on irkit command
+
 === 0.0.4 2014-03-17
 
 * add --show option on irkit command
