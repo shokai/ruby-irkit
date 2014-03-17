@@ -156,8 +156,8 @@ if args.has_param? "device:add"
   puts "token:\t#{token}"
   res = irkit.get_key_and_deviceid(token)
 
-  puts "clientkey:\t#{res.clientkey}"
-  puts "deviceid:\t#{res.deviceid}"
+  puts "clientkey:\t#{res.clientkey[0..6]}XXXXXX"
+  puts "deviceid:\t#{res.deviceid[0..6]}XXXXXX"
   IRKit::App::Data["Device"][name] = res
   IRKit::App::Data.save
   puts %Q{"#{name}" saved!}
