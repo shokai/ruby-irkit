@@ -154,12 +154,11 @@ if args.has_param? "device:add"
     exit 1 if STDIN.gets.strip.downcase =~ /n/
   end
   token = irkit.get_token
-  puts "token:\t#{token}"
-  res = irkit.get_key_and_deviceid(token)
+  info = irkit.get_key_and_deviceid(token)
 
-  puts "clientkey:\t#{res.clientkey[0..6]}XXXXXX"
-  puts "deviceid:\t#{res.deviceid[0..6]}XXXXXX"
-  IRKit::App::Data["Device"][name] = res
+  puts "clientkey:\t#{info.clientkey[0..6]}XXXXXX"
+  puts "deviceid:\t#{info.deviceid[0..6]}XXXXXX"
+  IRKit::App::Data["Device"][name] = info
   IRKit::App::Data.save
   puts %Q{"#{name}" saved!}
   exit
