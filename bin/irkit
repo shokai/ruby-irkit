@@ -9,6 +9,7 @@ args = ArgsParser.parse ARGV do
   arg :get, "get IR Data", :alias => :read
   arg :post, "post IR Data", :alias => :write
   arg :delete, "delete IR Data"
+  arg :show, "print IR Data"
   arg :list, "show list of IR Data and Devices"
   arg :address, "IRKit IP Address"
   arg :device, "use Internet API"
@@ -28,7 +29,7 @@ if args.has_option? :help or
     (!args.has_param?(:get) and !args.has_param?(:post) and
      !args.has_option?(:list) and !args.has_param?(:delete) and
      !args.has_param?(:device) and !args.has_param?("device:add") and
-     !args.has_param?("device:delete"))
+     !args.has_param?("device:delete") and !args.has_param?(:show))
   STDERR.puts "IRKit v#{IRKit::VERSION}"
   STDERR.puts "      https://github.com/shokai/ruby-irkit"
   STDERR.puts
@@ -38,6 +39,7 @@ if args.has_option? :help or
   STDERR.puts " % #{binname} --get  tv_on"
   STDERR.puts " % #{binname} --post tv_on"
   STDERR.puts " % #{binname} --post tv_on --address 192.168.0.123"
+  STDERR.puts " % #{binname} --show tv_on"
   STDERR.puts " % #{binname} --delete tv_on"
   STDERR.puts " % #{binname} --device:add myhouse"
   STDERR.puts " % #{binname} --post tv_on --device myhouse"
@@ -58,6 +60,12 @@ if args.has_option? :list
   IRKit::Device.find.each do |device|
     puts "#{device.address}\t#{device.bonjour_name} (bonjour)"
   end
+  exit
+end
+
+if args.has_param? :show
+  name = args[:show]
+  puts IRKit::App::Data["IR"][name].to_json
   exit
 end
 
