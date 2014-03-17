@@ -11,6 +11,10 @@ module IRKit
       "http://#{@address}"
     end
 
+    def to_s
+      inspect
+    end
+
     def get_messages
       res = HTTParty.get("#{url}/messages")
       case res.code

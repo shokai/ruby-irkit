@@ -98,7 +98,7 @@ unless irkit
   exit 1
 end
 
-p irkit
+puts irkit
 
 if args.has_param? :get
   name = args[:get]
