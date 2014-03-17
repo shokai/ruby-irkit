@@ -2,6 +2,9 @@
 
 [IRKit](http://getirkit.com) Client for Ruby
 
+- https://github.com/shokai/ruby-irkit
+- https://rubygems.org/gems/irkit
+
 
 ## Requirements
 
