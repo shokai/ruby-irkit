@@ -48,11 +48,11 @@ end
 if args.has_option? :list
   puts "~> #{IRKit::App::DATA_FILE}"
   puts "== Data"
-  IRKit::App::Data.IR.each do |k,v|
+  IRKit::App::Data["IR"].each do |k,v|
     puts k
   end
   puts "== Devices"
-  IRKit::App::Data.Device.each do |k,v|
+  IRKit::App::Data["Device"].each do |k,v|
     puts "#{k}\tInternet API"
   end
   IRKit::Device.find.each do |device|
@@ -65,7 +65,7 @@ if args.has_param? :delete
   name = args[:delete]
   print %Q{delete IR-Data "#{name}"? [Y/n] > }
   exit 1 if STDIN.gets.strip.downcase =~ /n/
-  IRKit::App::Data.IR.delete name
+  IRKit::App::Data["IR"].delete name
   IRKit::App::Data.save
   puts %Q{"#{name}" delete!}
   exit
@@ -75,7 +75,7 @@ if args.has_param? "device:delete"
   name = args["device:delete"]
   print %Q{delete Device "#{name}"? [Y/n] > }
   exit 1 if STDIN.gets.strip.downcase =~ /n/
-  IRKit::App::Data.Device.delete name
+  IRKit::App::Data["Device"].delete name
   IRKit::App::Data.save
   puts %Q{"#{name}" delete!}
   exit
@@ -84,7 +84,7 @@ end
 if args.has_param? :address
   irkit = IRKit::Device.new(address: args[:address])
 elsif args.has_param? :device
-  unless info = IRKit::App::Data.Device[ args[:device] ]
+  unless info = IRKit::App::Data["Device"][ args[:device] ]
     STDERR.puts %Q{Device "#{args[:device]}" not found}
     exit 1
   end
@@ -102,7 +102,7 @@ puts irkit
 
 if args.has_param? :get
   name = args[:get]
-  if IRKit::App::Data.IR.has_key? name
+  if IRKit::App::Data["IR"].has_key? name
     print %Q{overwrite "#{name}"? [Y/n] > }
     exit 1 if STDIN.gets.strip.downcase =~ /n/
   end
@@ -116,7 +116,7 @@ if args.has_param? :get
     ir_data = res
   end
   puts ir_data.to_json
-  IRKit::App::Data.IR[name] = ir_data
+  IRKit::App::Data["IR"][name] = ir_data
   IRKit::App::Data.save
   puts %Q{"#{name}" saved!}
   exit
@@ -125,7 +125,7 @@ end
 if args.has_param? :post
   name = args[:post]
   puts %Q{post "#{name}"}
-  unless ir_data = IRKit::App::Data.IR[name]
+  unless ir_data = IRKit::App::Data["IR"][name]
     STDERR.puts %Q{IR Data "#{name}" not found}
     exit 1
   end
@@ -140,7 +140,7 @@ end
 
 if args.has_param? "device:add"
   name = args["device:add"]
-  if IRKit::App::Data.Device.has_key? name
+  if IRKit::App::Data["Device"].has_key? name
     print %Q{overwrite "#{name}"? [Y/n] > }
     exit 1 if STDIN.gets.strip.downcase =~ /n/
   end
@@ -150,7 +150,7 @@ if args.has_param? "device:add"
 
   puts "clientkey:\t#{res.clientkey}"
   puts "deviceid:\t#{res.deviceid}"
-  IRKit::App::Data.Device[name] = res
+  IRKit::App::Data["Device"][name] = res
   IRKit::App::Data.save
   puts %Q{"#{name}" saved!}
   exit
