@@ -1,3 +1,8 @@
+=== 0.0.4 2014-03-17
+
+* add --show option on irkit command
+* hide deviceid and clientkey on irkit command #2
+
 === 0.0.3 2014-03-17
 
 * fix irkit command  #1
