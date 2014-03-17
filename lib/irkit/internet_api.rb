@@ -16,7 +16,7 @@ module IRKit
     end
 
     def to_s
-      %Q{<#{self.class} @deviceid="#{@deviceid[0..6]}XXXXX" @clientkey="#{@clientkey[0..6]}XXXXX">}
+      %Q{#<#{self.class} @deviceid="#{@deviceid[0..6]}XXXXX" @clientkey="#{@clientkey[0..6]}XXXXX">}
     end
 
     def get_messages(query={})
