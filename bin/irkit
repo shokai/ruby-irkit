@@ -98,6 +98,7 @@ elsif args.has_param? :device
   end
   irkit = IRKit::InternetAPI.new(clientkey: info.clientkey, deviceid: info.deviceid)
 else
+  puts "finding IRKit with bonjour..."
   irkit = IRKit::Device.find.first
 end
 
