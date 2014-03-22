@@ -26,4 +26,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "httparty"
   spec.add_dependency "json"
   spec.add_dependency "hashie"
+  spec.add_dependency "args_parser"
 end

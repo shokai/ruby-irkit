@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     irkit (0.0.5)
+      args_parser
       dnssd
       hashie
       httparty
@@ -10,6 +11,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
+    args_parser (0.2.0)
     dnssd (2.0)
     hashie (2.0.5)
     httparty (0.13.0)
