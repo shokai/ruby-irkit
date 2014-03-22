@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    irkit (0.0.5)
+    irkit (0.0.6)
       args_parser
       dnssd
       hashie

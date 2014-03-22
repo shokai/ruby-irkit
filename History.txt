@@ -1,3 +1,8 @@
+=== 0.0.6 2014-03-23
+
+* add gem dependency "args_parser"  #3
+  * thank you for contributing @mallowlabs
+
 === 0.0.5 2014-03-17
 
 * add --device:show option on irkit command
