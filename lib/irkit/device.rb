@@ -3,8 +3,8 @@ module IRKit
 
     attr_accessor :address, :bonjour_name
 
-    def initialize(address: nil)
-      @address = address
+    def initialize(opts = {:address => nil})
+      @address = opts[:address]
     end
 
     def url
@@ -12,7 +12,7 @@ module IRKit
     end
 
     def to_s
-      inspect
+      %Q{#<#{self.class} @address="#{@address}" @bonjour_name="#{@bonjour_name}">}
     end
 
     def get_messages

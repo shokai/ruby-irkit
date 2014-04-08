@@ -4,11 +4,11 @@ module IRKit
 
     attr_reader :clientkey, :deviceid
 
-    def initialize(clientkey: nil, deviceid: nil)
-      raise ArgumentError, "clientkey must be String" unless clientkey.kind_of? String
-      raise ArgumentError, "deviceid must be String" unless deviceid.kind_of? String
-      @clientkey = clientkey
-      @deviceid = deviceid
+    def initialize(opts = {:clientkey => nil, :deviceid => nil})
+      raise ArgumentError, "clientkey must be String" unless opts[:clientkey].kind_of? String
+      raise ArgumentError, "deviceid must be String" unless opts[:deviceid].kind_of? String
+      @clientkey = opts[:clientkey]
+      @deviceid = opts[:deviceid]
     end
 
     def url
