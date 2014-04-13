@@ -9,6 +9,7 @@ args = ArgsParser.parse ARGV do
   arg :get, "get IR Data", :alias => :read
   arg :post, "post IR Data", :alias => :write
   arg :delete, "delete IR Data"
+  arg :rename, "rename IR Data -to NEWNAME"
   arg :show, "print IR Data"
   arg :list, "show list of IR Data and Devices"
   arg :address, "IRKit IP Address"
@@ -29,7 +30,7 @@ binname = File.basename __FILE__
 if args.has_option? :help or
     (!args.has_param?(:get) and !args.has_param?(:post) and
      !args.has_option?(:list) and !args.has_param?(:delete) and
-     !args.has_param?(:show) and
+     !args.has_param?(:rename) and !args.has_param?(:show) and
      !args.has_param?(:device) and !args.has_param?("device:add") and
      !args.has_param?("device:show") and !args.has_param?("device:delete"))
   STDERR.puts "IRKit v#{IRKit::VERSION}"
@@ -42,7 +43,8 @@ if args.has_option? :help or
   STDERR.puts " % #{binname} --post tv_on"
   STDERR.puts " % #{binname} --post tv_on --address 192.168.0.123"
   STDERR.puts " % #{binname} --show tv_on"
-  STDERR.puts " % #{binname} --delete tv_on"
+  STDERR.puts " % #{binname} --delete tv_on"  
+  STDERR.puts " % #{binname} --rename tv_on -to newname"
   STDERR.puts " % #{binname} --device:add myhouse"
   STDERR.puts " % #{binname} --post tv_on --device myhouse"
   STDERR.puts " % #{binname} --device:delete myhouse"
@@ -78,6 +80,18 @@ if args.has_param? :delete
   IRKit::App::Data["IR"].delete name
   IRKit::App::Data.save
   puts %Q{"#{name}" delete!}
+  exit
+end
+
+if (args.has_param? :rename) && (args.has_param? :to) 
+  name = args[:rename]
+  newname = args[:to] 
+  print %Q{rename IR-Data "#{name}" to "#{newname}?" [Y/n] > }
+  exit 1 if STDIN.gets.strip.downcase =~ /n/
+  IRKit::App::Data["IR"][newname] = IRKit::App::Data["IR"].name
+  IRKit::App::Data["IR"].delete name
+  IRKit::App::Data.save
+  puts %Q{"#{name}" to "#{newname}" rename!}
   exit
 end
 
