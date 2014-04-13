@@ -43,7 +43,7 @@ if args.has_option? :help or
   STDERR.puts " % #{binname} --post tv_on"
   STDERR.puts " % #{binname} --post tv_on --address 192.168.0.123"
   STDERR.puts " % #{binname} --show tv_on"
-  STDERR.puts " % #{binname} --delete tv_on"  
+  STDERR.puts " % #{binname} --delete tv_on"
   STDERR.puts " % #{binname} --rename tv_on -to newname"
   STDERR.puts " % #{binname} --device:add myhouse"
   STDERR.puts " % #{binname} --post tv_on --device myhouse"
@@ -83,13 +83,17 @@ if args.has_param? :delete
   exit
 end
 
-if (args.has_param? :rename) && (args.has_param? :to) 
+if args.has_param?(:rename) && args.has_param?(:to)
   name = args[:rename]
-  newname = args[:to] 
+  newname = args[:to]
+  unless IRKit::App::Data["IR"].has_key? name
+    STDERR.puts %Q{IR Data "#{name}" not found}
+    exit 1
+  end
   print %Q{rename IR-Data "#{name}" to "#{newname}?" [Y/n] > }
   exit 1 if STDIN.gets.strip.downcase =~ /n/
-  IRKit::App::Data["IR"][newname] = IRKit::App::Data["IR"].name
-  IRKit::App::Data["IR"].delete name
+  IRKit::App::Data["IR"][newname] = IRKit::App::Data["IR"][name]
+  IRKit::App::Data["IR"].delete name if name != newname
   IRKit::App::Data.save
   puts %Q{"#{name}" to "#{newname}" rename!}
   exit
