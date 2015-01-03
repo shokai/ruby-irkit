@@ -1,4 +1,4 @@
-Copyright (c) 2014 Sho Hashimoto
+Copyright (c) 2014-2015 Sho Hashimoto
 
 MIT License
 
