@@ -16,7 +16,7 @@ module IRKit
     end
 
     def get_messages
-      res = HTTParty.get("#{url}/messages")
+      res = HTTParty.get("#{url}/messages", headers: headers)
       case res.code
       when 200
         return nil if res.body.length < 1
@@ -28,13 +28,14 @@ module IRKit
 
     def post_messages(data)
       opts = {
-        :body => data.to_json
+        :body => data.to_json,
+        :headers => headers
       }
       HTTParty.post "#{url}/messages", opts
     end
 
     def get_token
-      res = HTTParty.post "#{url}/keys", {}
+      res = HTTParty.post "#{url}/keys", {headers: headers}
       case res.code
       when 200
         return JSON.parse(res.body)["clienttoken"]
@@ -59,5 +60,10 @@ module IRKit
       end
     end
 
+    private
+
+    def headers
+      {"X-Requested-With" => "curl"}
+    end
   end
 end
