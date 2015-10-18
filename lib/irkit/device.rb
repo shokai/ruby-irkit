@@ -63,7 +63,7 @@ module IRKit
     private
 
     def headers
-      {"X-Requested-With" => "curl"}
+      {"X-Requested-With" => "ruby-irkit"}
     end
   end
 end
